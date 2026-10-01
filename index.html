@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1220">
+<title>PSU Deadline Calendar</title>
+<style>
+:root{--bg:#0a0f18;--panel:#111925;--panel2:#162131;--border:#273447;--text:#f4f7fb;--muted:#98a6b8;--math:#7fb3ff;--dyn:#ffab7b;--som:#8addb0;--hw:#89a8ff;--quiz:#d6a8ff;--exam:#ff7f88}
+*{box-sizing:border-box}html{color-scheme:dark}body{margin:0;min-width:320px;background:radial-gradient(circle at 30% -10%,#14223b 0,transparent 32%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}.site{width:min(1500px,100%);margin:auto;padding:0 22px 34px}
+header{min-height:82px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--border)}
+.brand{font-weight:900;font-size:19px}.sub{color:var(--muted);font-size:12px;margin-top:3px}.actions,.monthnav,.filters,.dialog-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+button{min-height:40px;border:1px solid var(--border);border-radius:10px;background:#0d1520;color:var(--text);padding:0 13px}
+.primary{background:#eef4ff;color:#08101b;border-color:#eef4ff;font-weight:850}.toolbar{padding:22px 0 15px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.monthnav h1{margin:0;min-width:210px;text-align:center;font-size:28px;letter-spacing:-.04em}.icon{width:40px;padding:0}.filter.active{background:var(--panel2);border-color:#566a84}.filter.math{color:var(--math)}.filter.dyn{color:var(--dyn)}.filter.som{color:var(--som)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start}.card{background:rgba(17,25,37,.95);border:1px solid var(--border);border-radius:18px;overflow:hidden}
+.weekdays,.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}.weekdays{border-bottom:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.08em}.weekdays div{padding:11px}
+.day{min-height:140px;padding:8px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);min-width:0}.day:nth-child(7n){border-right:0}.day.other{opacity:.35}.day.today{box-shadow:inset 0 0 0 1px #8495aa}
+.num{width:27px;height:27px;display:grid;place-items:center;color:var(--muted);font-size:12px;font-weight:850;border-radius:8px;margin-bottom:7px}.today .num{background:#edf3ff;color:#08101b}
+.events{display:grid;gap:5px}.event{width:100%;text-align:left;border:1px solid transparent;border-radius:8px;background:#172233;color:var(--text);padding:6px 7px}.event:hover{border-color:#526680}.event.done{text-decoration:line-through;opacity:.42}.event.hw{border-left:3px solid var(--hw)}.event.quiz{border-left:3px solid var(--quiz)}.event.exam{border-left:3px solid var(--exam);background:#281a21}.ec{font-size:9px;font-weight:900;letter-spacing:.06em;opacity:.75}.et{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;font-weight:760}
+.rail{display:grid;gap:14px}.railcard{padding:17px}.railhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.kicker{font-size:10px;color:var(--muted);font-weight:900;letter-spacing:.12em}.rail h2{margin:2px 0 0;font-size:18px}.count{min-width:28px;height:28px;display:grid;place-items:center;background:var(--panel2);border-radius:99px;color:var(--muted);font-weight:800;font-size:12px}
+.list{display:grid;gap:8px}.item{width:100%;text-align:left;border:1px solid var(--border);border-radius:11px;background:#0d1520;color:var(--text);padding:10px}.itemtop{display:flex;justify-content:space-between;gap:7px;margin-bottom:3px}.course,.date{font-size:10px}.course{font-weight:900}.date,.meta{color:var(--muted)}.title{font-size:13px;font-weight:800}.meta{font-size:11px;margin-top:2px}
+dialog{width:min(550px,calc(100% - 22px));border:1px solid var(--border);border-radius:17px;background:var(--panel);color:var(--text);padding:0}dialog::backdrop{background:rgba(0,0,0,.7)}.dialog{padding:21px}.dialogtop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.dialog h2{margin:8px 0 0;font-size:24px}.close{width:40px;height:40px;padding:0;font-size:22px}.pill{display:inline-block;border:1px solid var(--border);border-radius:99px;padding:5px 8px;font-size:11px;font-weight:850}.detail{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.detail>div{border:1px solid var(--border);border-radius:11px;padding:11px}.label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:850}.detail strong{display:block;margin-top:4px;font-size:14px}.note{color:var(--muted);font-size:13px;line-height:1.5}.links{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.links a{display:inline-flex;min-height:40px;align-items:center;text-decoration:none;background:#eef4ff;color:#08101b;border-radius:9px;padding:0 11px;font-size:13px;font-weight:850}.complete{display:flex;gap:9px;align-items:center;border-top:1px solid var(--border);padding-top:15px;font-weight:750}.complete input{width:19px;height:19px}
+.field{display:grid;gap:6px;margin-top:12px;color:var(--muted);font-size:12px;font-weight:750}.field input,.field select{width:100%;min-height:42px;border:1px solid var(--border);border-radius:9px;background:#0c1420;color:var(--text);padding:0 10px;font-size:16px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.dialog-actions{justify-content:flex-end;margin-top:18px}.empty{color:var(--muted);font-size:12px}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.rail{grid-template-columns:1fr 1fr}.railcard:last-child{grid-column:1/-1}}
+@media(max-width:740px){.site{padding:0 11px 26px}header{padding:12px 0}.sub{display:none}.actions .todaybtn{display:none}.monthnav{width:100%;justify-content:space-between}.monthnav h1{font-size:22px;min-width:0}.filters{width:100%;overflow-x:auto;flex-wrap:nowrap}.filter{white-space:nowrap}.card.calendar{overflow-x:auto}.weekdays,.grid{min-width:750px}.rail{grid-template-columns:1fr}}
+@media(max-width:480px){.detail,.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="site">
+<header><div><div class="brand">PSU Deadline Calendar</div><div class="sub">Fall 2026 · MATH 231 · EMCH 212 · EMCH 213</div></div><div class="actions"><button id="todayBtn" class="todaybtn">Today</button><button id="addBtn" class="primary">+ Add deadline</button></div></header>
+<main>
+<section class="toolbar"><div class="monthnav"><button id="prevBtn" class="icon">←</button><h1 id="monthTitle">October 2026</h1><button id="nextBtn" class="icon">→</button></div><div class="filters"><button class="filter active" data-course="all">All</button><button class="filter math" data-course="MATH 231">MATH 231</button><button class="filter dyn" data-course="EMCH 212">EMCH 212</button><button class="filter som" data-course="EMCH 213">EMCH 213</button></div></section>
+<section class="layout">
+<div class="card calendar"><div class="weekdays"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div><div id="grid" class="grid"></div></div>
+<aside class="rail">
+<section class="card railcard"><div class="railhead"><div><span class="kicker">NEXT UP</span><h2>Upcoming</h2></div><span id="count" class="count">0</span></div><div id="upcoming" class="list"></div></section>
+<section class="card railcard"><div class="railhead"><div><span class="kicker">NO DATE YET</span><h2>Undated</h2></div></div><div id="undated" class="list"></div></section>
+<section class="card railcard"><span class="kicker">HOW IT WORKS</span><p class="meta">Click any event for its due time and Canvas link. Completion and personal deadlines are saved in this browser.</p></section>
+</aside>
+</section>
+</main>
+</div>
+
+<dialog id="detailDialog"><div class="dialog"><div class="dialogtop"><div><span id="dCourse" class="pill"></span><h2 id="dTitle"></h2></div><button id="closeDetail" class="close">×</button></div><div class="detail"><div><span class="label">Type</span><strong id="dType"></strong></div><div><span class="label">Due</span><strong id="dDate"></strong></div></div><p id="dNote" class="note"></p><div id="dLinks" class="links"></div><label class="complete"><input id="complete" type="checkbox"> Mark completed</label></div></dialog>
+
+<dialog id="addDialog"><form id="addForm" class="dialog"><div class="dialogtop"><div><span class="kicker">PERSONAL ITEM</span><h2>Add deadline</h2></div><button type="button" id="closeAdd" class="close">×</button></div><label class="field">Title<input id="aTitle" required maxlength="100" placeholder="Homework 6"></label><label class="field">Course<select id="aCourse"><option>MATH 231</option><option>EMCH 212</option><option>EMCH 213</option></select></label><div class="row"><label class="field">Date<input id="aDate" type="date" required></label><label class="field">Time<input id="aTime" type="time"></label></div><label class="field">Type<select id="aType"><option value="hw">Homework / Assignment</option><option value="quiz">Quiz</option><option value="exam">Exam</option></select></label><label class="field">Link (optional)<input id="aLink" type="url" placeholder="https://..."></label><div class="dialog-actions"><button type="button" id="cancelAdd">Cancel</button><button class="primary">Add to calendar</button></div></form></dialog>
+
+<script>
+const events=[];
+function add(id,course,title,date,time,type,url,note,upload){events.push({id,course,title,date,time,type,url,note,upload})}
+const dyn=[
+[8,"2026-10-02","18643571","18643574"],[9,"2026-10-05","18643575","18643578"],[10,"2026-10-09","18643486","18643489"],[11,"2026-10-14","18643491","18643494"],[12,"2026-10-19","18643496","18643498"],[13,"2026-10-23","18643500","18643503"],[14,"2026-10-28","18643505","18643507"],[15,"2026-11-04","18643508","18643511"],[16,"2026-11-09","18643513","18643515"],[17,"2026-11-13","18643517","18643520"],[18,"2026-11-18","18643522","18643524"],[19,"2026-11-30","18643525","18643527"],[20,"2026-12-04","18643533","18643535"],[21,"2026-12-11","18643537","18643541"]];
+dyn.forEach(x=>add("dyn"+x[0],"EMCH 212","HW #"+x[0],x[1],"23:59","hw","https://psu.instructure.com/courses/2482513/assignments/"+x[2],"Dynamics homework deadline.","https://psu.instructure.com/courses/2482513/assignments/"+x[3]));
+add("dexam2","EMCH 212","Midterm Exam 2","2026-10-12","19:45","exam","https://psu.instructure.com/courses/2482513/assignments/18643590");
+add("dexam3","EMCH 212","Midterm Exam 3","2026-12-09","19:45","exam","https://psu.instructure.com/courses/2482513/assignments/18643592");
+
+const som=[
+["s1","Exam 1","2026-09-28","18:15","exam","18751426"],["s2","Exam 2","2026-11-02","18:15","exam","18751430"],
+["q1a","Quiz 1a","2026-08-28","15:30","quiz","18669566"],["q1b","Quiz 1b","2026-08-28","18:30","quiz","18714750"],
+["q2a","Quiz 2a","2026-09-04","15:30","quiz","18723853"],["q2b","Quiz 2b","2026-09-04","18:30","quiz","18723854"],["q2c","Quiz 2c","2026-09-06","13:30","quiz","18723891"],
+["q3a","Quiz 3a","2026-09-11","15:30","quiz","18734626"],["q3b","Quiz 3b","2026-09-11","18:30","quiz","18734627"],["q3c","Quiz 3c","2026-09-13","13:30","quiz","18734625"],
+["q4a","Quiz 4a","2026-09-18","15:30","quiz","18746832"],["q4b","Quiz 4b","2026-09-18","18:30","quiz","18746831"],["q4c","Quiz 4c","2026-09-20","13:30","quiz","18746830"]];
+som.forEach(x=>add(x[0],"EMCH 213",x[1],x[2],x[3],x[4],"https://psu.instructure.com/courses/2483449/assignments/"+x[5]));
+
+add("mh5","MATH 231","Homework 5","2026-10-05","23:59","hw","https://psu.instructure.com/courses/2486893/assignments/18759353","Canvas currently lists Homework 5 as upcoming.");
+add("mexam1","MATH 231","Exam 1","2026-10-07","18:15","exam",null,"Regular evening exam: 6:15–7:30 PM.");
+add("mexam2","MATH 231","Exam 2","2026-11-09","18:15","exam",null,"Regular evening exam: 6:15–7:30 PM.");
+add("mfinal","MATH 231","Comprehensive Final Exam","2026-12-14",null,"exam",null,"Final occurs during Dec 14–18. Exact date/time comes from LionPATH.");
+["2026-10-12","2026-10-19","2026-10-26","2026-11-02","2026-11-09","2026-11-16","2026-11-30","2026-12-07"].forEach(d=>add("mhw"+d,"MATH 231","Weekly homework deadline",d,"23:59","hw",null,"Syllabus pattern: homework is due Mondays at 11:59 PM. Replace with the exact Canvas assignment once posted."));
+["2026-10-05","2026-10-12","2026-10-19","2026-10-26","2026-11-02","2026-11-09","2026-11-16","2026-11-30","2026-12-07"].forEach(d=>add("mq"+d,"MATH 231","In-class quiz",d,null,"quiz",null,"Syllabus pattern: quizzes are given in class on Mondays."));
+
+const undated=[
+{id:"mq4",course:"MATH 231",title:"Quiz 4",type:"quiz",url:"https://psu.instructure.com/courses/2486893/assignments/18759355"},
+{id:"mq1",course:"MATH 231",title:"Quiz 1",type:"quiz",url:"https://psu.instructure.com/courses/2486893/assignments/18730606",note:"10/10"},
+{id:"mq2",course:"MATH 231",title:"Quiz 2",type:"quiz",url:"https://psu.instructure.com/courses/2486893/assignments/18730607",note:"10/10"},
+{id:"mq3",course:"MATH 231",title:"Quiz 3",type:"quiz",url:"https://psu.instructure.com/courses/2486893/assignments/18759354",note:"9/10"}
+];
+
+let custom=JSON.parse(localStorage.getItem("psuCustom")||"[]"),done=JSON.parse(localStorage.getItem("psuDone")||"{}");
+events.push(...custom);
+let cursor=new Date(2026,9,1),filter="all",selected=null;
+const $=id=>document.getElementById(id),grid=$("grid"),monthTitle=$("monthTitle"),upcoming=$("upcoming"),count=$("count"),und=$("undated"),detail=$("detailDialog"),addDialog=$("addDialog");
+function dObj(s){const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)}
+function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function visible(){return events.filter(e=>filter==="all"||e.course===filter)}
+function fmt(e){const d=dObj(e.date),base=d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});if(!e.time)return base;const [h,m]=e.time.split(":").map(Number),t=new Date(2000,0,1,h,m);return base+" · "+t.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"})}
+function color(c){return c==="MATH 231"?"var(--math)":c==="EMCH 212"?"var(--dyn)":"var(--som)"}
+function typeLabel(t){return t==="exam"?"Exam":t==="quiz"?"Quiz":"Homework / Assignment"}
+function openEvent(e){selected=e;$("dCourse").textContent=e.course;$("dTitle").textContent=e.title;$("dType").textContent=typeLabel(e.type);$("dDate").textContent=e.date?fmt(e):"No date yet";$("dNote").textContent=e.note||"";const links=$("dLinks");links.innerHTML="";if(e.url){const a=document.createElement("a");a.href=e.url;a.target="_blank";a.rel="noopener";a.textContent="Open in Canvas";links.appendChild(a)}if(e.upload){const a=document.createElement("a");a.href=e.upload;a.target="_blank";a.rel="noopener";a.textContent="Open upload";links.appendChild(a)}if(!e.url&&!e.upload)links.innerHTML='<span class="empty">No Canvas link provided yet.</span>';$("complete").checked=!!done[e.id];detail.showModal()}
+function renderCalendar(){monthTitle.textContent=cursor.toLocaleDateString("en-US",{month:"long",year:"numeric"});grid.innerHTML="";const y=cursor.getFullYear(),m=cursor.getMonth(),first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),today=new Date();for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);const cell=document.createElement("div");cell.className="day"+(d.getMonth()!==m?" other":"")+(ymd(d)===ymd(today)?" today":"");cell.innerHTML='<div class="num">'+d.getDate()+'</div>';const wrap=document.createElement("div");wrap.className="events";visible().filter(e=>e.date===ymd(d)).sort((a,b)=>(a.time||"99:99").localeCompare(b.time||"99:99")).slice(0,5).forEach(e=>{const b=document.createElement("button");b.className="event "+e.type+(done[e.id]?" done":"");b.innerHTML='<span class="ec">'+e.course+'</span><span class="et">'+e.title+'</span>';b.addEventListener("click",()=>openEvent(e));wrap.appendChild(b)});cell.appendChild(wrap);grid.appendChild(cell)}}
+function renderUpcoming(){const today=new Date();today.setHours(0,0,0,0);const list=visible().filter(e=>e.date&&dObj(e.date)>=today&&!done[e.id]).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||"99:99").localeCompare(b.time||"99:99")).slice(0,12);count.textContent=list.length;upcoming.innerHTML=list.length?"":'<div class="empty">Nothing upcoming.</div>';list.forEach(e=>{const b=document.createElement("button");b.className="item";b.innerHTML='<div class="itemtop"><span class="course" style="color:'+color(e.course)+'">'+e.course+'</span><span class="date">'+fmt(e)+'</span></div><div class="title">'+e.title+'</div><div class="meta">'+typeLabel(e.type)+'</div>';b.addEventListener("click",()=>openEvent(e));upcoming.appendChild(b)})}
+function renderUndated(){const list=undated.filter(e=>filter==="all"||e.course===filter);und.innerHTML=list.length?"":'<div class="empty">No undated items.</div>';list.forEach(e=>{const b=document.createElement("button");b.className="item";b.innerHTML='<div class="itemtop"><span class="course">'+e.course+'</span><span class="date">Undated</span></div><div class="title">'+e.title+'</div>'+(e.note?'<div class="meta">'+e.note+'</div>':"");b.addEventListener("click",()=>openEvent(e));und.appendChild(b)})}
+function render(){renderCalendar();renderUpcoming();renderUndated()}
+$("prevBtn").addEventListener("click",()=>{cursor=new Date(cursor.getFullYear(),cursor.getMonth()-1,1);renderCalendar()});$("nextBtn").addEventListener("click",()=>{cursor=new Date(cursor.getFullYear(),cursor.getMonth()+1,1);renderCalendar()});$("todayBtn").addEventListener("click",()=>{const t=new Date();cursor=new Date(t.getFullYear(),t.getMonth(),1);renderCalendar()});
+document.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter=b.dataset.course;render()}));
+$("closeDetail").addEventListener("click",()=>detail.close());$("complete").addEventListener("change",e=>{if(!selected)return;done[selected.id]=e.target.checked;localStorage.setItem("psuDone",JSON.stringify(done));render()});
+$("addBtn").addEventListener("click",()=>{$("aDate").value=ymd(new Date());addDialog.showModal()});$("closeAdd").addEventListener("click",()=>addDialog.close());$("cancelAdd").addEventListener("click",()=>addDialog.close());
+$("addForm").addEventListener("submit",e=>{e.preventDefault();const title=$("aTitle").value.trim(),date=$("aDate").value;if(!title||!date)return;const item={id:"custom"+Date.now(),course:$("aCourse").value,title,date,time:$("aTime").value||null,type:$("aType").value,url:$("aLink").value.trim()||null,note:"Personal deadline added in this browser."};custom.push(item);events.push(item);localStorage.setItem("psuCustom",JSON.stringify(custom));cursor=new Date(dObj(date).getFullYear(),dObj(date).getMonth(),1);e.target.reset();addDialog.close();render()});
+render();
+</script>
+</body>
+</html>
